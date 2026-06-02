@@ -12,7 +12,7 @@ const JobListPage = () => {
 
         AxiosInstance.get('/jobs/')
             .then(response => setJobs(response.data))
-            .then(setJobs)
+          
             .catch(err => console.error("Failed to fetch jobs:", err))
 
     }, [])
