@@ -16,29 +16,30 @@ const ApplyJobPage = () => {
     const { jobId } = useParams()
     const userId = localStorage.getItem("userId")
 
-    async function applyJobAction(_) {
+    async function applyJobAction() {
 
-        const res = await AxiosInstance('http://127.0.0.1:8000/apply/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                job: jobId,
-                applicant: userId
-            })
+    try {
+
+        const response = await AxiosInstance.post('/apply/', {
+            job: jobId,
+            applicant: userId
         })
 
-
-
-        const data = await res.json()
-        if (res.ok) {
-            return { message: data.message, success: true }
+        return {
+            message: response.data.message,
+            success: true
         }
-        return { message: data.message, success: false }
 
+    } catch (error) {
+
+        return {
+            message:
+                error.response?.data?.message ||
+                "Application Failed",
+            success: false
+        }
     }
-
+}
     return (
         <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
 

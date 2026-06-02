@@ -5,26 +5,30 @@ import { Link, useNavigate } from 'react-router-dom'
 import AxiosInstance from './AxiosInstance'
 
 async function loginAction(_, formData) {
-    const json = Object.fromEntries(formData)
 
-    const res = await AxiosInstance('http://127.0.0.1:8000/login/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(json)
-    })
+    const json = Object.fromEntries(formData);
 
-    const data = await res.json()
+    try {
 
-    if (res.ok) {
-        localStorage.setItem("userId", data.user_id)
-        localStorage.setItem("username", data.username)
+        const response = await AxiosInstance.post('/login/', json);
+
+        const data = response.data;
+
+        localStorage.setItem("userId", data.user_id);
+        localStorage.setItem("username", data.username);
+
+        return data.message || "Login successful";
+
+    } catch (error) {
+
+        console.log(error);
+
+        return (
+            error.response?.data?.message ||
+            "Login Failed"
+        );
     }
-
-    return data.message || "Login Failed"
 }
-
 const LoginPage = () => {
 
     const [message, formAction, isPending] = useActionState(

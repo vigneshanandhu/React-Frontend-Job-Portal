@@ -5,16 +5,24 @@ import './App.css'
 import AxiosInstance from './AxiosInstance'
 
 async function registerAction(_, formData) {
+
     const json = Object.fromEntries(formData)
-    const res = await AxiosInstance('http://127.0.0.1:8000/register/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(json)
-    })
-    const data = await res.json()
-    return data.message || "registration Failed"
+
+    try {
+
+        const response = await AxiosInstance.post('/register/', json)
+
+        return response.data.message || "Registration successful"
+
+    } catch (error) {
+
+        console.log(error)
+
+        return (
+            error.response?.data?.message ||
+            "Registration Failed"
+        )
+    }
 }
 
 const RegisterPage = () => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import AxiosInstance from './AxiosInstance'
 
@@ -9,10 +9,12 @@ const JobListPage = () => {
     const username = localStorage.getItem("username") || "Guest"
 
     useEffect(() => {
-        AxiosInstance('http://localhost:8000/jobs/')
-            .then(response => response.json())
+
+        AxiosInstance.get('/jobs/')
+            .then(response => setJobs(response.data))
             .then(setJobs)
             .catch(err => console.error("Failed to fetch jobs:", err))
+
     }, [])
 
     return (
@@ -54,20 +56,20 @@ const JobListPage = () => {
                             <div key={job.id} className="rounded-lg border bg-white p-5 transition hover:shadow-md">
                                 <h3 className="text-lg font-semibold text-blue-700">{job.title}</h3>
                                 <p className="mt-1 text-sm text-gray-700">{job.company}</p>
-                                <p className="text-gray-700 text-xs">{new Date(job.posted_at).toLocaleDateString("en-US",{
+                                <p className="text-gray-700 text-xs">{new Date(job.posted_at).toLocaleDateString("en-US", {
                                     month: "short",
                                     day: "numeric",
                                     year: "numeric"
                                 })}</p>
                                 <div className="mt-3 flex flex-wrap gap-3 text-sm text-gray-600">
                                     <span className="rounded bg-gray-100 px-2 py-1">📍 {job.location}</span>
-                            <span className="rounded bg-gray-100 px-2 py-1">💰{ job.salary }</span>
-                            <span className="rounded bg-gray-100 px-2 py-1">🕒 Full Time</span>
-                        </div>
-                        <div className="mt-4 flex justify-end">
-                            <Link to={`/apply/${job.id}`} className="text-sm font-medium text-blue-700 hover:underline">View Details →</Link>
-                        </div>
-                    </div>
+                                    <span className="rounded bg-gray-100 px-2 py-1">💰{job.salary}</span>
+                                    <span className="rounded bg-gray-100 px-2 py-1">🕒 Full Time</span>
+                                </div>
+                                <div className="mt-4 flex justify-end">
+                                    <Link to={`/apply/${job.id}`} className="text-sm font-medium text-blue-700 hover:underline">View Details →</Link>
+                                </div>
+                            </div>
 
                         )))}
                 </div>
