@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState,useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import AxiosInstance from './AxiosInstance'
 
 const JobListPage = () => {
     const [jobs, setJobs] = useState([])
@@ -8,7 +9,7 @@ const JobListPage = () => {
     const username = localStorage.getItem("username") || "Guest"
 
     useEffect(() => {
-        fetch('http://localhost:8000/jobs/')
+        AxiosInstance('http://localhost:8000/jobs/')
             .then(response => response.json())
             .then(setJobs)
             .catch(err => console.error("Failed to fetch jobs:", err))

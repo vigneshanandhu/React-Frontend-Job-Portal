@@ -5,10 +5,7 @@ import axios from 'react'
 const isDevelopment = import.meta.env.MODE === 'development';
 const myBaseUrl = isDevelopment ? import.meta.env.VITE_API_BASE_URL_LOCAL : import.meta.env.VITE_API_BASE_URL_DEPLOY;
 
-console.log("MODE =", import.meta.env.MODE);
-console.log("VITE_API_BASE_URL_LOCAL =", import.meta.env.VITE_API_BASE_URL_LOCAL);
-console.log("VITE_API_BASE_URL_DEPLOY =", import.meta.env.VITE_API_BASE_URL_DEPLOY);
-console.log("API_BASE_URL =", myBaseUrl);
+
 
 
 const AxiosInstance = axios.create({

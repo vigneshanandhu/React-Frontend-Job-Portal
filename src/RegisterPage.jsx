@@ -2,10 +2,11 @@ import React from 'react'
 import { useActionState } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
+import AxiosInstance from './AxiosInstance'
 
 async function registerAction(_, formData) {
     const json = Object.fromEntries(formData)
-    const res = await fetch('http://127.0.0.1:8000/register/', {
+    const res = await AxiosInstance('http://127.0.0.1:8000/register/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

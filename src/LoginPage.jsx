@@ -2,11 +2,12 @@ import React from 'react'
 import './App.css'
 import { useActionState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import AxiosInstance from './AxiosInstance'
 
 async function loginAction(_, formData) {
     const json = Object.fromEntries(formData)
 
-    const res = await fetch('http://127.0.0.1:8000/login/', {
+    const res = await AxiosInstance('http://127.0.0.1:8000/login/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
