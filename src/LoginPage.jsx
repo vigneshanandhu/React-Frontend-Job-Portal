@@ -1,10 +1,11 @@
 import React from 'react'
 import './App.css'
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 async function loginAction(_, formData) {
     const json = Object.fromEntries(formData)
+
     const res = await fetch('http://127.0.0.1:8000/login/', {
         method: 'POST',
         headers: {
@@ -12,127 +13,230 @@ async function loginAction(_, formData) {
         },
         body: JSON.stringify(json)
     })
+
     const data = await res.json()
-    if(res.ok){
+
+    if (res.ok) {
         localStorage.setItem("userId", data.user_id)
         localStorage.setItem("username", data.username)
     }
+
     return data.message || "Login Failed"
 }
 
 const LoginPage = () => {
-    const [message, formAction, isPending] = useActionState(loginAction, "", {
-        withPending: true
-    })
-    const navigate = useNavigate();  
-    if(message === "Login successful"){
-     
+
+    const [message, formAction, isPending] = useActionState(
+        loginAction,
+        "",
+        {
+            withPending: true
+        }
+    )
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (message === "Login successful") {
             navigate("/jobs")
-}
+        }
+    }, [message, navigate])
 
     return (
-        <div className="bg-gray-50 text-gray-800">
+        <div className="min-h-screen bg-gray-100 flex flex-col">
 
+            {/* Navbar */}
+            <header className="bg-white shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
 
-            <header className="bg-white border-b">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <div className="text-2xl font-bold text-blue-700">
+                    <h1 className="text-2xl font-bold text-blue-700">
                         JobPortal
-                    </div>
+                    </h1>
 
-                    <nav className="hidden md:flex gap-6 text-sm font-medium text-gray-700">
-                        <Link to="/jobs" className="hover:text-blue-700">Jobs</Link>
-                        <Link to="/companies" className="hover:text-blue-700">Companies</Link>
-                        <Link to="/services" className="hover:text-blue-700">Services</Link>
-                        <Link to="/register" className="hover:text-blue-700">Register</Link>
+                    <nav className="flex gap-3 sm:gap-6 text-sm font-medium text-gray-700">
+                        <Link
+                            to="/jobs"
+                            className="hover:text-blue-700 transition"
+                        >
+                            Jobs
+                        </Link>
+
+                        <Link
+                            to="/companies"
+                            className="hover:text-blue-700 transition hidden sm:block"
+                        >
+                            Companies
+                        </Link>
+
+                        <Link
+                            to="/services"
+                            className="hover:text-blue-700 transition hidden sm:block"
+                        >
+                            Services
+                        </Link>
+
+                        <Link
+                            to="/register"
+                            className="hover:text-blue-700 transition"
+                        >
+                            Register
+                        </Link>
                     </nav>
+
                 </div>
             </header>
 
+            {/* Main Section */}
+            <main className="flex-1 flex items-center justify-center px-4 py-10">
 
-            <main className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="w-full max-w-6xl bg-white rounded-2xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
 
-                <section className="hidden md:block">
-                    <h1 className="text-3xl font-bold leading-snug">
-                        Find your dream job now
-                    </h1>
+                    {/* Left Side */}
+                    <div className="bg-blue-700 text-white p-8 md:p-12 flex flex-col justify-center">
 
-                    <p className="mt-4 text-gray-600 max-w-md">
-                        Register with JobPortal and get matched with the right opportunities.
-                        Build your profile and apply to jobs in top companies.
-                    </p>
+                        <h2 className="text-3xl md:text-4xl font-bold leading-tight">
+                            Find Your Dream Job
+                        </h2>
 
-                    <ul className="mt-6 space-y-3 text-sm text-gray-700">
-                        <li>✔ Trusted by thousands of recruiters</li>
-                        <li>✔ Personalized job recommendations</li>
-                        <li>✔ Easy apply & profile visibility</li>
-                    </ul>
-                </section>
-
-                <section className="hidden md:block">
-
-
-                    <h1 className="text-2xl font-bold text-blue-700 text-center">
-                        JobPortal
-                    </h1>
-                    <p className="text-sm text-gray-500 text-center mt-1">
-                        Login to your account
-                    </p>
-
-
-                    <form action={formAction} className="mt-6 space-y-4">
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Username
-                            </label>
-                            <input type="username" name='username' placeholder="Enter your username" className="mt-1 w-full rounded border border-gray-300 px-3 py-2
-                focus:border-blue-600 focus:ring-1 focus:ring-blue-200
-                outline-none" />
-                        </div>
-
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Password
-                            </label>
-                            <input type="password" name='password' placeholder="Enter your password" className="mt-1 w-full rounded border border-gray-300 px-3 py-2
-                focus:border-blue-600 focus:ring-1 focus:ring-blue-200
-                outline-none" />
-                        </div>
-
-
-                        <div className="text-right">
-                            <a href="#" className="text-sm text-blue-700 hover:underline">
-                                Forgot Password?
-                            </a>
-                        </div>
-
-
-                        <button disabled={isPending} type='submit' className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2.5 rounded transition">
-                            {isPending ? "Logging in..." : "Login"}
-                        </button>
-
-                        <p className="text-sm text-green-600 text-center">
-                            {message}
+                        <p className="mt-4 text-blue-100 text-sm md:text-base leading-7">
+                            Login to explore thousands of job opportunities
+                            from top companies. Build your career with
+                            JobPortal.
                         </p>
 
+                        <div className="mt-8 space-y-4">
 
-                        <p className="text-sm text-center text-gray-600">
-                            New to JobPortal?
-                            <Link to="/register" className="text-blue-700 font-medium hover:underline">
-                                Register here
-                            </Link>
-                        </p>
-                    </form>
-                </section>
+                            <div className="flex items-center gap-3">
+                                <span className="text-xl">✔</span>
+                                <p className="text-sm md:text-base">
+                                    Trusted by recruiters
+                                </p>
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                                <span className="text-xl">✔</span>
+                                <p className="text-sm md:text-base">
+                                    Personalized job suggestions
+                                </p>
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                                <span className="text-xl">✔</span>
+                                <p className="text-sm md:text-base">
+                                    Easy and quick applications
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {/* Right Side */}
+                    <div className="p-6 sm:p-10 md:p-12 flex items-center">
+
+                        <div className="w-full">
+
+                            <h2 className="text-3xl font-bold text-center text-gray-800">
+                                Welcome Back
+                            </h2>
+
+                            <p className="text-center text-gray-500 mt-2">
+                                Login to continue
+                            </p>
+
+                            <form
+                                action={formAction}
+                                className="mt-8 space-y-5"
+                            >
+
+                                {/* Username */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Username
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="username"
+                                        placeholder="Enter username"
+                                        className="w-full border border-gray-300 rounded-lg px-4 py-3
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                {/* Password */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Password
+                                    </label>
+
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        placeholder="Enter password"
+                                        className="w-full border border-gray-300 rounded-lg px-4 py-3
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                {/* Forgot Password */}
+                                <div className="text-right">
+                                    <a
+                                        href="#"
+                                        className="text-sm text-blue-700 hover:underline"
+                                    >
+                                        Forgot Password?
+                                    </a>
+                                </div>
+
+                                {/* Button */}
+                                <button
+                                    disabled={isPending}
+                                    type="submit"
+                                    className="w-full bg-blue-700 hover:bg-blue-800
+                                    text-white font-semibold py-3 rounded-lg transition"
+                                >
+                                    {isPending ? "Logging in..." : "Login"}
+                                </button>
+
+                                {/* Message */}
+                                {
+                                    message && (
+                                        <p className={`text-center text-sm font-medium ${message === "Login successful"
+                                                ? "text-green-600"
+                                                : "text-red-600"
+                                            }`}>
+                                            {message}
+                                        </p>
+                                    )
+                                }
+
+                                {/* Register */}
+                                <p className="text-center text-sm text-gray-600">
+                                    Don&apos;t have an account?
+
+                                    <Link
+                                        to="/register"
+                                        className="text-blue-700 font-semibold ml-1 hover:underline"
+                                    >
+                                        Register
+                                    </Link>
+                                </p>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </main>
 
-
-            <footer className="border-t bg-white">
-                <div className="max-w-7xl mx-auto px-6 py-6 text-sm text-gray-500 text-center">
-                    © 2026 JobPortal.com | All rights reserved
+            {/* Footer */}
+            <footer className="bg-white border-t">
+                <div className="max-w-7xl mx-auto px-4 py-5 text-center text-sm text-gray-500">
+                    © 2026 JobPortal. All rights reserved.
                 </div>
             </footer>
 
