@@ -17,7 +17,7 @@ const ApplyJobPage = () => {
 
     async function applyJobAction(_) {
 
-        const res = await fetch('http://127.0.0.1:8000/apply/', {
+        const res = await fetch('https://react-django-job-portal-3.onrender.com/apply/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

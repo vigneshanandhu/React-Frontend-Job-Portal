@@ -8,7 +8,7 @@ const JobListPage = () => {
     const username = localStorage.getItem("username") || "Guest"
 
     useEffect(() => {
-        fetch('http://localhost:8000/jobs/')
+        fetch('https://react-django-job-portal-3.onrender.com/jobs/')
             .then(response => response.json())
             .then(setJobs)
             .catch(err => console.error("Failed to fetch jobs:", err))

@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 async function loginAction(_, formData) {
     const json = Object.fromEntries(formData)
 
-    const res = await fetch('http://127.0.0.1:8000/login/', {
+    const res = await fetch('https://react-django-job-portal-3.onrender.com/login/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
